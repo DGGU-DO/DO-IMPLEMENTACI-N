@@ -1,14 +1,12 @@
 
 clear
-cd "D:\MIDIS 2015\METODOLOGÍA MIDIS 2015\2. Implementación\"
+*cd "D:\MIDIS 2015\METODOLOGÍA MIDIS 2015\2. Implementación\"
+cd "G:\bases ifh 2015\"
 
 *use "muestra\PI2_2014_ULE", clear
 
 use "muestra2\BASE_MUESTRA2", clear
 
-*1. Número de bienes
-*destring  c04_03_14n, replace
-*recode c04_03_14 (.=0)
 gen b_bien=c04_03_1 + c04_03_2 + c04_03_3 + c04_03_4 + c04_03_5 + c04_03_6 + c04_03_7 + c04_03_8 + c04_03_9 + c04_03_10 + c04_03_11 + c04_03_12 + c04_03_13 + c04_03_14n
 
 *2. Número de bienes percápita
@@ -65,8 +63,10 @@ drop jh_sec_incom
 
 gen anoeduc=.
 replace anoeduc=0			    if c05_15==1 | c05_15==2 
-replace anoeduc=c05_16	     	if c05_15==3 & c05_16<=6 
-replace anoeduc=6+c05_16	    if c05_15==4 & c05_16<=5 
+replace anoeduc=c05_16	     	if c05_15==3 & c05_16<=6
+replace anoeduc=6	     	    if c05_15==3 & c05_16>6
+replace anoeduc=6+c05_16	    if c05_15==4 & c05_16<=5
+replace anoeduc=6+5      	    if c05_15==4 & c05_16>5  //
 replace anoeduc=6+5+c05_16	    if c05_15==5 & c05_16<=3 // sup. no univ
 replace anoeduc=6+5+3    	    if c05_15==5 & c05_16>3 // sup. no univ
 replace anoeduc=6+5+c05_16	    if c05_15==6 & c05_16<=5  // sup. univ
@@ -131,5 +131,10 @@ gen v_usa_gas=(c04_02==2)
 recode GEO_DominioArea  (11=1)  (12=2)(21=3)  (22=4)(31=5)  (32=6)  (41=7)  (42=8) (51=9)  (52=10)  (61=11) (62=12) (71=13) (72=14)(81=15)
 
 *keep if GEO_DominioArea==15
+sort departamen provincia distrito id_cedula data
+
+*duplicates drop departamen provincia distrito id_cedula data,force
+
+keep if c05_08==1
   
 save "muestra2\MUESTRA2_indicadores", replace
