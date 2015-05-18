@@ -7,6 +7,7 @@ cd "G:\bases ifh 2015\"
 
 use "muestra2\BASE_MUESTRA2", clear
 
+*1. Número de bienes
 gen b_bien=c04_03_1 + c04_03_2 + c04_03_3 + c04_03_4 + c04_03_5 + c04_03_6 + c04_03_7 + c04_03_8 + c04_03_9 + c04_03_10 + c04_03_11 + c04_03_12 + c04_03_13 + c04_03_14n
 
 *2. Número de bienes percápita
@@ -48,7 +49,6 @@ destring c05_13a, replace
 gen  indig_jh=((c05_13a == 1 | c05_13a == 2 | c05_13a == 3 | c05_13a==7) & c05_08 == 1)
 bys departamen provincia distrito id_cedula data: egen c_indig_jh=max(indig_jh)
 drop indig_jh
-
 
 *12. Jefe de hogar con secundaria incompleta
 *----------------------------------------------
