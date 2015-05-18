@@ -1,8 +1,19 @@
 
+clear
+cd "D:\MIDIS 2015\METODOLOGÍA MIDIS 2015\2. Implementación\"
+
+*
+*insheet using "bases\zvar_coef.csv",delimiter(";")
+*recode idmodelo (112=1)(113=2)(122=3)(123=4)(216=5)(217=6)(222=7)(223=8)(312=9)(313=10)(326=11)(415=12)(414=13)(425=14)(516=15)(518=16)(523=17)(612=18)(613=19)(624=20)(712=21)(713=22)(721=23) (815=24	)(814=25),gen(mod)
+*recode geo_domarea  (11=1)  (12=2)(21=3)  (22=4)(31=5)  (32=6)  (41=7)  (42=8) (51=9)  (52=10)  (61=11) (62=12) (71=13) (72=14)(81=15), gen (GEO_DominioArea)
+*drop v15
+
+*
+*use "enaho\base_unificada", clear
 use "enaho\ENAHO_TOTA1L_Puntaje.dta", clear
 
-
 keep if p203==1
+
 
 rename geo_domarea GEO_DominioArea
 
@@ -100,62 +111,10 @@ egen total_puntuado=rowtotal(b_bien_per_z_punt	b_bien_z_punt	b_biendur_z_punt	b_
 save "enaho\enaho_TOT_puntuado.dta", replace
 
 clear
-*use "bases\umbrales_150512_a.dta", clear
-use "bases\umbrales_150514_b.dta", clear
 
-/*
-gen and_or=2
-replace and_or=1 if geo_dominioarea==32
-replace and_or=1 if geo_dominioarea==42 
-replace and_or=1 if geo_dominioarea==52 
-replace and_or=1 if geo_dominioarea==62 
-replace and_or=1 if geo_dominioarea==72 
-gen and_or_ext=1
-*/
-/*
-gen     umbralextrema_2y=.
-replace umbralextrema_2y=	2.10218	    if geo_dominioarea==	11
-replace umbralextrema_2y=	1.125315	if geo_dominioarea==	12
-replace umbralextrema_2y=	2.266709	if geo_dominioarea==	21
-replace umbralextrema_2y=	1.661555	if geo_dominioarea==	22
-replace umbralextrema_2y=	2.126658	if geo_dominioarea==	31
-replace umbralextrema_2y=	2.424272	if geo_dominioarea==	32
-replace umbralextrema_2y=	1.892967	if geo_dominioarea==	41
-replace umbralextrema_2y=	0.6016529	if geo_dominioarea==	42
-replace umbralextrema_2y=	2.254781	if geo_dominioarea==	51
-replace umbralextrema_2y=	0.7997083	if geo_dominioarea==	52
-replace umbralextrema_2y=	1.689231	if geo_dominioarea==	61
-replace umbralextrema_2y=	0.9120762	if geo_dominioarea==	62
-replace umbralextrema_2y=	1.776886	if geo_dominioarea==	71
-replace umbralextrema_2y=	0.9175011	if geo_dominioarea==	72
-replace umbralextrema_2y=	2.590264	if geo_dominioarea==	81
-*/
-gen     umbralextrema_2y=.
-replace umbralextrema_2y=	2.10218	    if geo_dominioarea==	11	& numfactor==1
-replace umbralextrema_2y=	2.445709	if geo_dominioarea==	11	& numfactor==2
-replace umbralextrema_2y=	1.125315	if geo_dominioarea==	12	& numfactor==1
-replace umbralextrema_2y=	0.8955247	if geo_dominioarea==	12	& numfactor==2
-replace umbralextrema_2y=	2.266709	if geo_dominioarea==	21	& numfactor==1
-replace umbralextrema_2y=	2.967457	if geo_dominioarea==	21	& numfactor==2
-replace umbralextrema_2y=	1.661555	if geo_dominioarea==	22	& numfactor==1
-replace umbralextrema_2y=	1.738223	if geo_dominioarea==	22	& numfactor==2
-replace umbralextrema_2y=	2.126658	if geo_dominioarea==	31	& numfactor==1
-replace umbralextrema_2y=	3.413625	if geo_dominioarea==	31	& numfactor==2
-replace umbralextrema_2y=	2.424272	if geo_dominioarea==	32	& numfactor==1
-replace umbralextrema_2y=	1.892967	if geo_dominioarea==	41	& numfactor==1
-replace umbralextrema_2y=	2.78551	    if geo_dominioarea==	41	& numfactor==2
-replace umbralextrema_2y=	0.6016529	if geo_dominioarea==	42	& numfactor==1
-replace umbralextrema_2y=	2.254781	if geo_dominioarea==	51	& numfactor==1
-replace umbralextrema_2y=	1.663908	if geo_dominioarea==	51	& numfactor==2
-replace umbralextrema_2y=	0.7997083	if geo_dominioarea==	52	& numfactor==1
-replace umbralextrema_2y=	1.689231	if geo_dominioarea==	61	& numfactor==1
-replace umbralextrema_2y=	2.369348	if geo_dominioarea==	61	& numfactor==2
-replace umbralextrema_2y=	0.9120762	if geo_dominioarea==	62	& numfactor==1
-replace umbralextrema_2y=	1.776886	if geo_dominioarea==	71	& numfactor==1
-replace umbralextrema_2y=	2.083209	if geo_dominioarea==	71	& numfactor==2
-replace umbralextrema_2y=	0.9175011	if geo_dominioarea==	72	& numfactor==1
-replace umbralextrema_2y=	2.590264	if geo_dominioarea==	81	& numfactor==1
-replace umbralextrema_2y=	2.506281	if geo_dominioarea==	81	& numfactor==2
+use "bases\umbrales_150515_d.dta", clear
+
+
 
 merge 1:m idmodelo using "enaho\enaho_TOT_puntuado.dta"
 drop _m
@@ -226,4 +185,4 @@ label values GEO_DominioArea geo
 gen factorpob=factor07*mieperho
 
 tab GEO_DominioArea pobrezamidis [aw=factorpob], row nofreq  
-tab GEO_DominioArea pobreza  [aw=factorpob], row nofreq  
+tab GEO_DominioArea pobreza  [aw=factorpob], row nofreq   
