@@ -1,7 +1,9 @@
 
 clear
 
-cd "D:\MIDIS 2015\METODOLOGÍA MIDIS 2015\2. Implementación\"
+*cd "D:\MIDIS 2015\METODOLOGÍA MIDIS 2015\2. Implementación\"
+
+cd "G:\bases ifh 2015\"
 
 *paso de CSV a DTA
 insheet using "muestra2\HOGAR.csv"
@@ -20,15 +22,7 @@ saveold "muestra2\LOCALIZACION", replace
 clear
 
 insheet using "muestra2\POBLACION.csv"
-/*
-gen uno=(c05_08==1)
-bys departamen provincia distrito id_cedula data: egen jh_dup= total(uno) 
 
-gen dos=(c05_08==2)
-bys departamen provincia distrito id_cedula data: egen cony_dup= total(dos) 
-
-drop uno dos jh_dup cony_dup
-*/
 saveold "muestra2\POBLACION", replace
 clear
 
@@ -63,8 +57,6 @@ merge 1:m departamen provincia distrito id_cedula data using "muestra2\POBLACION
 drop _m
 
 merge m:1 departamen provincia distrito id_cedula data using "muestra2\LOCALIZACION_ccpp"
-
-
 
 keep if _m==3
 drop _m
